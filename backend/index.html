@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Video Stream</title>
+</head>
+<body>
+    <video id="video" autoplay muted playsinline></video>
+    <script>
+        async function startVideo() {
+            // Check if the browser supports getUserMedia
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert("getUserMedia not supported on this browser.");
+                return;
+            }
+
+            try {
+                // Request the back camera (rear-facing)
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: { exact: "environment" }  // This requests the rear camera
+                    }
+                });
+
+                // Show the video on the page
+                document.getElementById('video').srcObject = stream;
+
+                // Create a new RTCPeerConnection
+                const pc = new RTCPeerConnection();
+
+                // Add tracks to the connection
+                stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+                const offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
+
+                // Send offer to the backend
+                const response = await fetch('/offer', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        sdp: pc.localDescription.sdp,
+                        type: pc.localDescription.type
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const answer = await response.json();
+                await pc.setRemoteDescription(new RTCSessionDescription(answer));
+            } catch (error) {
+                console.error("Error accessing the camera:", error);
+                alert("Error accessing the camera. Please check browser permissions and try again.");
+            }
+        }
+
+        // Start the video capture as soon as the page loads
+        startVideo();
+    </script>
+</body>
+</html>
