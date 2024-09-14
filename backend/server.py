@@ -26,16 +26,16 @@ async def offer(request):
     async def on_track(track):
         if track.kind == "video":
             print("Receiving video track...")
-            counter = 0
+            counter = 0  # Frame counter
             while True:
                 frame = await track.recv()
                 counter += 1
+                # Process every 10th frame
                 # if counter % 10 == 0:
-                # Convert YUV to RGB using OpenCV
                 img = frame.to_ndarray(format="bgr24")
-                rgb_img = cv2.cvtColor(img, cv2.COLOR_YUV2BGR_I420)  # Convert from YUV420 to BGR
-                processed_frame = process_frame(rgb_img)
-                # Send the processed frame via WebSocket
+                processed_frame = process_frame(img)
+
+                # Send the processed frame to all WebSocket clients
                 for ws in ws_clients:
                     await ws.send_json({'frame': processed_frame})
 
