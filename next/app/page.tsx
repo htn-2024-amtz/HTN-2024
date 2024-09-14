@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {Button} from "flowbite-react";
+import {HiOutlineArrowRight} from "react-icons/hi";
 
 export default function Home() {
     return (
@@ -10,7 +11,11 @@ export default function Home() {
         AI, enhancing perspectives and uncovering new possibilities.</h2>
 
     <Link href="/start" className="">
-        <Button gradientDuoTone="redToYellow" size="md">Let's start</Button>
+        <Button gradientDuoTone="redToYellow" size="md">Let's start
+
+            <HiOutlineArrowRight className="ml-2 h-5 w-5" />
+
+        </Button>
     </Link>
 </div>        </div>
     );

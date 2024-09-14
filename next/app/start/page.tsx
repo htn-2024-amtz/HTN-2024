@@ -1,8 +1,9 @@
-import VideoCapture from "@/app/components/video-capture";
-import {Button, Label, Textarea} from "flowbite-react";
-import Image from 'next/image'
+import {Button, Label, Tabs, Textarea} from "flowbite-react";
 import {BsMagic} from "react-icons/bs";
 import {ImageRotation} from "@/app/components/image-rotation";
+import { HiUserCircle} from "react-icons/hi";
+import {MdDashboard} from "react-icons/md";
+import {InputTabs} from "@/app/components/input-tabs";
 //             <VideoCapture />
 
 
@@ -17,7 +18,7 @@ export default function Page() {
 
             <div className="flex gap-6 justify-center">
 
-                <div className="max-w-md flex flex-col gap-2">
+                <div className="max-w-96 min-w-96 flex flex-col gap-2">
                     <div className="mb-2 block">
                         <Label htmlFor="comment" value="Your style"/>
                     </div>
@@ -27,6 +28,9 @@ export default function Page() {
                         <BsMagic className="mr-2 h-5 w-5"/>
 
                         Imagine</Button>
+
+
+                    <InputTabs />
 
                 </div>
 
