@@ -11,7 +11,7 @@ export default function Home() {
         AI, enhancing perspectives and uncovering new possibilities.</h2>
 
     <Link href="/start" className="">
-        <Button gradientDuoTone="redToYellow" size="md">Let's start
+        <Button gradientDuoTone="redToYellow" size="md">Let&apos;s start
 
             <HiOutlineArrowRight className="ml-2 h-5 w-5" />
 
