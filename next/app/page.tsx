@@ -1,5 +1,5 @@
 import { Button } from "flowbite-react";
-import VideoCapture from "@/app/components/video-capture";
+// import VideoCapture from "@/app/components/video-capture";
 
 
 //       <VideoCapture />
