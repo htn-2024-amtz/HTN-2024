@@ -21,7 +21,7 @@ export default function RootLayout({
         <ConvexClientProvider>
             <nav className="p-4 flex items-center justify-start gap-3">
                 <Link href="/">🌻 fleurish</Link>
-                <h1 className="text-gray-500 text-md font-bold text-center">start your <span
+                <h1 className="text-gray-500 text-md font-bold text-center"> – start your <span
                     className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">dreams</span> here
                 </h1>
 
