@@ -7,6 +7,7 @@ import {Button, Spinner, TextInput} from "flowbite-react";
 import {BsMagic} from "react-icons/bs";
 import {InputTabs} from "@/app/components/input-tabs";
 import {useForm} from "react-hook-form";
+import {CohereClient} from "cohere-ai";
 
 export function ImageRotation() {
     const [autoSubmit, setAutoSubmit] = useState(false);
@@ -28,6 +29,35 @@ export function ImageRotation() {
         prompt: string;
     }>();
 
+
+
+
+    const cohere = new CohereClient({
+        token: "D0UaSg8SeqduF2D485RkCZimhR34DxodX47TJFRK",
+    });
+
+    // wwwi
+    // @ts-expect-error    jjjjjjjjj
+    let chatHistory = [];
+
+    async function imageAI() {
+        const chat = await cohere.chat({
+            model: "command-r-plus",
+            message: "suggest a word or fewer words for a prompt. This promt should be used for an image to image ai model. For example black and white or futuristic.",
+            preamble: "only answer the result no additional information and only one result. Recommend every time another word or phrase.",
+            // @ts-expect-error    jjjjjjjjj
+            chatHistory: chatHistory,
+
+        });
+
+        console.log(chat);
+        // @ts-expect-error    jjjjjjjjj
+        chatHistory = chatHistory.push( chat.chatHistory);
+        handlePresetClick(chat.text)
+    }
+
+
+
     useEffect(() => {
         if (autoSubmit) {
             const interval = setInterval(() => {
@@ -41,6 +71,7 @@ export function ImageRotation() {
     const sortedSketches = (sketchesQuery ?? []).sort((a, b) => {
         return b._creationTime - a._creationTime;
     });
+
 
     useEffect(() => {
         const ws = new WebSocket("ws://192.168.110.85:8080/ws");
@@ -128,7 +159,7 @@ export function ImageRotation() {
                     <div className="flex justify-start items-center gap-2">
                         <TextInput className="flex-grow" placeholder="your promt" id="prompt" {...register("prompt", {required: false})}
                                    value={preset} onChange={(e) => setPreset(e.target.value)}/>
-                        <button>
+                        <button onClick={imageAI}>
                             <BsMagic className="h-5 w-5"/>
                         </button>
                     </div>
