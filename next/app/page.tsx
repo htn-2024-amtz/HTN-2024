@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {Button} from "flowbite-react";
 import {HiOutlineArrowRight} from "react-icons/hi";
+import Image from "next/image";
 
 export default function Home() {
     return (
@@ -11,15 +12,16 @@ export default function Home() {
                     the eyes of
                     AI, enhancing perspectives and uncovering new possibilities.</h2>
 
-                <Link href="/start" className="">
+                <Link href="/start" className="mt-4">
                     <Button gradientDuoTone="redToYellow" size="md">Let&apos;s start
                         <HiOutlineArrowRight className="ml-2 h-5 w-5"/>
                     </Button>
                 </Link>
-
-
             </div>
 
+            <div className="flex justify-center">
+            <Image src="/finalGIF1.gif" alt="example as gif" width={400} height={400} />
+            </div>
 
 
         </div>
