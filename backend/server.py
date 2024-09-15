@@ -1,5 +1,6 @@
 import asyncio
 import json
+
 import cv2
 import base64
 from aiohttp import web, WSMsgType
@@ -29,15 +30,15 @@ async def offer(request):
             counter = 0  # Frame counter
             while True:
                 frame = await track.recv()
-                counter += 1
-                # Process every 10th frame
-                # if counter % 10 == 0:
-                img = frame.to_ndarray(format="bgr24")
-                processed_frame = process_frame(img)
+                # Process every 100 frame
+                if counter % 100 == 0:
+                    img = frame.to_ndarray(format="bgr24")
+                    processed_frame = process_frame(img)
 
-                # Send the processed frame to all WebSocket clients
-                for ws in ws_clients:
-                    await ws.send_json({'frame': processed_frame})
+                    # Send the processed frame to all WebSocket clients
+                    for ws in ws_clients:
+                        await ws.send_json({'frame': processed_frame})
+                counter += 1
 
     await pc.setRemoteDescription(offer)
     answer = await pc.createAnswer()
@@ -50,7 +51,7 @@ async def offer(request):
 
 def process_frame(frame):
     """
-    Process the frame (every 10th frame).
+    Process the frame (every 500th frame).
     Convert it to a format suitable for sending over WebSocket (Base64-encoded JPEG).
     """
     _, jpeg_frame = cv2.imencode('.jpg', frame)
