@@ -12,9 +12,7 @@ export default function Home() {
 
     <Link href="/start" className="">
         <Button gradientDuoTone="redToYellow" size="md">Let&apos;s start
-
             <HiOutlineArrowRight className="ml-2 h-5 w-5" />
-
         </Button>
     </Link>
 </div>        </div>
