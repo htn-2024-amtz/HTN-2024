@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation } from "convex/react";
-import {Button, Label, Textarea} from "flowbite-react";
+import {Button, Label, Textarea, TextInput} from "flowbite-react";
 import {BsMagic} from "react-icons/bs";
 import {InputTabs} from "@/app/components/input-tabs";
 
@@ -24,6 +24,9 @@ export function ImageRotation() {
         "/IMG_2255.jpeg",
     ];
 
+
+    const [image, setImage] = useState("");
+
     const [state, setState] = useState(0);
 
     useEffect(() => {
@@ -35,6 +38,9 @@ export function ImageRotation() {
     }, [images.length]);
 
     const sketchesQuery = useQuery(api.sketches.getSketches);
+
+
+
     const saveSketchMutation = useMutation(api.sketches.saveSketch);
 
     const {
@@ -49,6 +55,28 @@ export function ImageRotation() {
         return b._creationTime - a._creationTime;
     });
 
+
+
+
+    useEffect(() => {
+        const ws = new WebSocket("ws://192.168.110.85:8080/ws");
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.frame) {
+                setImage(`data:image/jpeg;base64,${data.frame}`);
+            }
+        };
+
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+        };
+
+        return () => ws.close();
+    }, []);
+
+
+
     return (
 
         <div className="flex gap-6 justify-center">
@@ -56,32 +84,36 @@ export function ImageRotation() {
                 <div className="mb-2 block">
                     <Label htmlFor="comment" value="Your style"/>
                 </div>
-                <Textarea id="comment" placeholder="describe your own vibe" required rows={4}/>
 
+                <form
+                    onSubmit={handleSubmit(async (formData) => {
+                        await saveSketchMutation({...formData, image});
+                    })}
+                >
 
-
+                <TextInput id="prompt" {...register("prompt", {required: false})}/>
                 <p>Presets:</p>
-
                 <div className="grid grid-cols-2 gap-2">
-
-                <Button>realistic</Button>
-                <Button>animated</Button>
-                <Button>cartoon</Button>
-                <Button>art</Button>
-                <Button>black and white</Button>
-                <Button>bright</Button>
-                <Button>dark</Button>
-
+                    <Button>realistic</Button>
+                    <Button>animated</Button>
+                    <Button>cartoon</Button>
+                    <Button>art</Button>
+                    <Button>black and white</Button>
+                    <Button>bright</Button>
+                    <Button>dark</Button>
                 </div>
-
-                <Button gradientDuoTone="redToYellow">
+                <Button type="submit" gradientDuoTone="redToYellow">
                     <BsMagic className="mr-2 h-5 w-5"/>
                     Imagine</Button>
+
+                </form>
+
 
                 <InputTabs/>
             </div>
             <>
                 {sortedSketches.length > 0 ? (
+
                     <Image
                         src={sortedSketches[0].result}
                         width={256}
@@ -94,10 +126,10 @@ export function ImageRotation() {
                 ) : (
                     <div/>
                 )}
-            </>        </div>
+            </>
+        </div>
 
 
-
-)
-    ;
+    )
+        ;
 }
