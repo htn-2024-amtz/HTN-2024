@@ -73,67 +73,6 @@ export function ImageRotation() {
     });
 
 
-    useEffect(() => {
-        const ws = new WebSocket("ws://192.168.110.85:8080/ws");
-
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.frame) {
-                setImage(`data:image/jpeg;base64,${data.frame}`);
-            }
-        };
-
-        ws.onerror = (error) => {
-            console.error("WebSocket error:", error);
-        };
-
-        return () => ws.close();
-    }, []);
-
-    // Handle sketch display logic
-    useEffect(() => {
-        const latestSketch = sortedSketches[0];
-
-        if (latestSketch && latestSketch.result) {
-            // If there's a valid sketch, set it as the current sketch
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setCurrentSketch(latestSketch);
-        } else if (previousSketchRef.current) {
-            // If no valid new sketch, use the previous sketch
-            setCurrentSketch(previousSketchRef.current);
-        }
-
-        // Store the current sketch in the ref for future comparisons
-        if (latestSketch) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            previousSketchRef.current = latestSketch;
-        }
-    }, [sortedSketches]);
-
-    // Handle opacity increment
-    useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        let interval;
-        if (currentSketch) {
-            opacityRef.current = 0; // Reset opacity when a new sketch is shown
-            setOpacity(0);
-
-            interval = setInterval(() => {
-                opacityRef.current = Math.min(opacityRef.current + 0.1, 1); // Increment opacity by 10%
-                setOpacity(opacityRef.current);
-            }, 1000); // Increase opacity every second
-        }
-
-        return () => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            clearInterval(interval); // Clean up interval on component unmount
-        };
-    }, [currentSketch]);
-
     const handlePresetClick = (preset: string) => {
         setPreset(preset);
         setValue("prompt", preset);
