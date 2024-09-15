@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {Button} from "flowbite-react";
 import {HiOutlineArrowRight} from "react-icons/hi";
-import Image from "next/image";
 
 export default function Home() {
     return (
