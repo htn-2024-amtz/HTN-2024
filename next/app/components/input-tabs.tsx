@@ -6,7 +6,7 @@ import {BiPhone, BiUpload} from "react-icons/bi";
 export function InputTabs() {
 
     return (
-    <Tabs aria-label="Tabs with icons" variant="underline">
+    <Tabs className="" aria-label="Tabs with icons" variant="underline">
         <Tabs.Item active title="Phone streaming" icon={BiPhone}>
             Smartphone streaming
         </Tabs.Item>
@@ -17,7 +17,6 @@ export function InputTabs() {
                 </div>
                 <FileInput id="file-upload"/>
             </div>
-
         </Tabs.Item>
     </Tabs>
     );
