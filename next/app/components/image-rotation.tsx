@@ -3,16 +3,15 @@
 import {useState, useEffect, useRef} from "react";
 import {api} from "@/convex/_generated/api";
 import {useQuery, useMutation} from "convex/react";
-import {Button, Label, TextInput} from "flowbite-react";
+import {Button, Label, Spinner, TextInput} from "flowbite-react";
 import {BsMagic} from "react-icons/bs";
 import {InputTabs} from "@/app/components/input-tabs";
-
 import {useForm} from "react-hook-form";
-
 
 export function ImageRotation() {
     const [autoSubmit, setAutoSubmit] = useState(false);
     const [image, setImage] = useState("");
+    const [preset, setPreset] = useState("");
     const [currentSketch, setCurrentSketch] = useState(null); // Holds the current sketch to be displayed
     const [opacity, setOpacity] = useState(0); // Tracks opacity
     const opacityRef = useRef(0); // A ref to track opacity across renders
@@ -24,6 +23,7 @@ export function ImageRotation() {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: {errors},
     } = useForm<{
         prompt: string;
@@ -96,29 +96,41 @@ export function ImageRotation() {
         };
     }, [currentSketch]);
 
+    const handlePresetClick = (preset: string) => {
+        setPreset(preset);
+        setValue("prompt", preset);
+    };
+
     return (
         <div className="flex gap-6 justify-center">
             <div className="max-w-96 min-w-96 flex flex-col gap-2">
-                <div className="mb-2 block">
-                    <Label htmlFor="comment" value="Your style"/>
-                </div>
 
+                <p className="text-gray-500">use your <span className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">own</span> Promt, use <span className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">presets</span>  or <span className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">ask</span> the AI for recommendations</p>
                 <form
                     onSubmit={handleSubmit(async (formData) => {
                         await saveSketchMutation({...formData, image});
                         setAutoSubmit(true);
                     })}
+                    className="flex flex-col gap-2"
                 >
-                    <TextInput id="prompt" {...register("prompt", {required: false})}/>
+                    <TextInput placeholder="your promt" id="prompt" {...register("prompt", {required: false})}
+                               value={preset} onChange={(e) => setPreset(e.target.value)}/>
                     <p>Presets:</p>
                     <div className="grid grid-cols-2 gap-2">
-                        <Button>realistic</Button>
-                        <Button>animated</Button>
-                        <Button>cartoon</Button>
-                        <Button>art</Button>
-                        <Button>black and white</Button>
-                        <Button>bright</Button>
-                        <Button>dark</Button>
+                        <Button gradientDuoTone="cyanToBlue"
+                                onClick={() => handlePresetClick("realistic")}>realistic</Button>
+                        <Button gradientDuoTone="cyanToBlue"
+                                onClick={() => handlePresetClick("futuristic")}>futuristic</Button>
+                        <Button gradientDuoTone="purpleToBlue"
+                                onClick={() => handlePresetClick("animated")}>animated</Button>
+                        <Button gradientDuoTone="greenToBlue"
+                                onClick={() => handlePresetClick("cartoon")}>cartoon</Button>
+                        <Button gradientDuoTone="pinkToOrange" onClick={() => handlePresetClick("art")}>art</Button>
+                        <Button gradientDuoTone="tealToLime" onClick={() => handlePresetClick("black and white")}>black
+                            and white</Button>
+                        <Button color="light"
+                                onClick={() => handlePresetClick("bright")}>bright</Button>
+                        <Button color="dark" onClick={() => handlePresetClick("dark")}>dark</Button>
                     </div>
                     <Button type="submit" gradientDuoTone="redToYellow">
                         <BsMagic className="mr-2 h-5 w-5"/>
@@ -126,7 +138,7 @@ export function ImageRotation() {
                 </form>
                 <InputTabs/>
             </div>
-            <>
+            <div>
                 {
                     currentSketch ? (
                         <div className="relative" style={{width: "512px", height: "512px"}}>
@@ -137,7 +149,7 @@ export function ImageRotation() {
                                 height="400"
                                 src={currentSketch.result}
                                 alt="AI-generated"
-                                className="absolute top-0 left-0"
+                                className="absolute top-0 left-0 rounded-lg shadow-md"
                             />
                             {/* WebSocket image overlay with dynamic opacity */}
                             {image && (
@@ -146,16 +158,16 @@ export function ImageRotation() {
                                     height="400"
                                     src={image}
                                     alt="WebSocket Image"
-                                    className="absolute top-0 left-0"
+                                    className="absolute top-0 left-0 rounded-lg shadow-md"
                                     style={{opacity: opacity}}
                                 />
                             )}
                         </div>
                     ) : (
-                        <></>
+                        <Spinner color="warning" aria-label="Warning spinner example"/>
                     )
                 }
-            </>
         </div>
+            </div>
     );
 }
