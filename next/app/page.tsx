@@ -10,9 +10,10 @@ export default function Home() {
         <div className="flex flex-col">
             <div className="flex-grow p-4 flex flex-col justify-center items-center gap-3 pt-[10vh]">
                 <h1 className="text-4xl font-bold">🌻 fleurish</h1>
-                <h2 className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Experience the world through
-                    the eyes of
-                    AI, enhancing perspectives and uncovering new possibilities.</h2>
+                <h2 className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400 max-w-xl text-center">
+                    Experience the world through the eyes of AI, enhance perspectives,
+                    and uncover new possibilities.
+                </h2>
 
                 <Link href="/start" className="mt-4">
                     <Button gradientDuoTone="redToYellow" size="md">Let&apos;s start

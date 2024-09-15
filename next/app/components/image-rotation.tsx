@@ -144,9 +144,9 @@ export function ImageRotation() {
             <div className="max-w-96 min-w-96 flex flex-col gap-2">
 
                 <p className="text-gray-500">use your <span
-                    className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">own</span> Promt,
+                    className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">own</span> prompt,
                     use <span
-                        className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">presets</span> or <span
+                        className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">presets</span>, or <span
                         className="font-semibold text-gray-900 underline dark:text-white decoration-amber-800">ask</span> the
                     AI for recommendations</p>
                 <form
@@ -157,7 +157,7 @@ export function ImageRotation() {
                     className="flex flex-col gap-2"
                 >
                     <div className="flex justify-start items-center gap-2">
-                        <TextInput className="flex-grow" placeholder="your promt" id="prompt" {...register("prompt", {required: false})}
+                        <TextInput className="flex-grow" placeholder="your prompt" id="prompt" {...register("prompt", {required: false})}
                                    value={preset} onChange={(e) => setPreset(e.target.value)}/>
                         <button onClick={imageAI}>
                             <BsMagic className="h-5 w-5"/>
