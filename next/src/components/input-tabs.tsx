@@ -8,7 +8,7 @@ export function InputTabs() {
     return (
     <Tabs className="" aria-label="Tabs with icons" variant="underline">
         <Tabs.Item active title="Phone streaming" icon={BiPhone}>
-            Smartphone streaming
+            For security reasons, not available on the web version.
         </Tabs.Item>
         <Tabs.Item title="Upload" icon={BiUpload}>
             <div>
